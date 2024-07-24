@@ -21,7 +21,12 @@ jobs:
     - run: npm ci
     - run: npm run build
     
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v4.3.4
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@v5.0.3
       with:
-        path: 'dist/**/*'
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvcp -i --delete --chown=www-data:www-data"
+        SOURCE: "dist/"
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        TARGET: ${{ secrets.REMOTE_TARGET }}
