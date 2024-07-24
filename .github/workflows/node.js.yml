@@ -13,14 +13,45 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js 22.x
+    - name: Build
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    
+    - name: Get IP Addresses
+      id: ip
+      uses: candidob/get-runner-ip@v1.0.0
+    - name: Add Firewall Rules
+      id: firewall_rule
+      run: |
+        curl -s -w "\n%{http_code}" "https://api.vultr.com/v2/firewalls/${{secrets.FIREWALL_GROUP_ID}}/rules" \
+          -X POST \
+          -H "Authorization: Bearer ${{secrets.VULTR_API_KEY}}" \
+          -H "Content-Type: application/json" \
+          --data '{
+            "ip_type" : "v4",
+            "protocol" : "tcp",
+            "port" : "22",
+            "subnet" : "${{steps.ip.outputs.ipv4}}",
+            "subnet_size" : 32,
+            "source" : "",
+            "notes" : "GitHub"
+          }' | {
+            read body
+            read code
+            if [[ $code == 201 ]]; then
+              id=$(echo "$body" | grep -oP '"id":\s*\K[^,]+')
+              echo "::set-output name=firewall_id_ipv4::$id"
+            else
+              echo $code
+              echo $body
+              exit 1
+            fi
+          }
+        # firewall rules can take up to 120s to propgate
+        sleep 120
     - name: Deploy
       uses: easingthemes/ssh-deploy@v5.0.3
       with:
@@ -30,3 +61,8 @@ jobs:
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ secrets.REMOTE_TARGET }}
+    - name: Remove Firewall Rules
+      run: |
+        curl "https://api.vultr.com/v2/firewalls/${{secrets.FIREWALL_GROUP_ID}}/rules/${{steps.firewall_rule.outputs.firewall_id_ipv4}}" \
+          -X DELETE \
+          -H "Authorization: Bearer ${{secrets.VULTR_API_KEY}}"
