@@ -15,6 +15,8 @@ const { title } = Astro.props;
 		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
 		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 		<meta name="generator" content={Astro.generator} />
+		{/* generated at build time by the sitemap integration */}
+		<link rel="sitemap" href="/sitemap-index.xml" />
 		<title>{title}</title>
 	</head>
 	<body>
