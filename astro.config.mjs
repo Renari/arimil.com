@@ -1,9 +1,9 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
 import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://arimil.com',
-  integrations: [sitemap()]
+  site: "https://arimil.com",
+  integrations: [sitemap()],
 });
