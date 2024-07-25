@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+User-agent: dotbot
+Disallow: /
+
+User-agent: rogerbot
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+Sitemap: https://arimil.com/sitemap-index.xml
