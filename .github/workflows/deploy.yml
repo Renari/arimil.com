@@ -25,7 +25,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v5.1.1
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-rlgoDzvcp -i --delete --chown=www-data:www-data"
+          ARGS: "-rlgoDzvcp -i --delete --exclude='files/' --chown=www-data:www-data"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
