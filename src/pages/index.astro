@@ -43,7 +43,10 @@ import Layout from "../layouts/Layout.astro";
     curve!: number;
 
     constructor(initX?: number, initY?: number) {
-      this.randomize(initX ?? Math.random() * width, initY ?? Math.random() * height);
+      this.randomize(
+        initX ?? Math.random() * width,
+        initY ?? Math.random() * height,
+      );
     }
 
     randomize(x: number, y: number) {
@@ -65,7 +68,12 @@ import Layout from "../layouts/Layout.astro";
       this.angle += this.spinSpeed;
 
       // If out of bounds, regenerate as a new particle from the left
-      if (this.x > width + 50 || this.x < -50 || this.y > height + 50 || this.y < -50) {
+      if (
+        this.x > width + 50 ||
+        this.x < -50 ||
+        this.y > height + 50 ||
+        this.y < -50
+      ) {
         this.randomize(-50, Math.random() * height);
       }
     }
@@ -75,13 +83,13 @@ import Layout from "../layouts/Layout.astro";
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
       ctx.fillStyle = this.color;
-      
+
       ctx.beginPath();
-      ctx.moveTo(-this.size/2, 0);
-      ctx.quadraticCurveTo(0, -this.size/4 + this.curve, this.size/2, 0);
-      ctx.quadraticCurveTo(0, this.size/4 + this.curve, -this.size/2, 0);
+      ctx.moveTo(-this.size / 2, 0);
+      ctx.quadraticCurveTo(0, -this.size / 4 + this.curve, this.size / 2, 0);
+      ctx.quadraticCurveTo(0, this.size / 4 + this.curve, -this.size / 2, 0);
       ctx.fill();
-      
+
       ctx.restore();
     }
   }
