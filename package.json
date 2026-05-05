@@ -12,7 +12,7 @@
     "check-formatting": "prettier . --check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.2.2",
     "typescript": "^6.0.3"
